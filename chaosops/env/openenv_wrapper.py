@@ -73,11 +73,26 @@ if _HAS_OPENENV:
             return ChaosOpsState.model_validate(payload)
 
     def build_fastapi_app():  # type: ignore[no-untyped-def]
-        """Return a ready-to-serve FastAPI app exposing ChaosOps AI."""
-        assert create_fastapi_app is not None
-        return create_fastapi_app(ChaosOpsEnvironment)
+        """Return a ready-to-serve FastAPI app exposing ChaosOps AI.
 
-    app = build_fastapi_app()
+        ``create_fastapi_app`` expects an environment *factory*, plus the
+        action and observation Pydantic classes so it can validate incoming
+        payloads before handing them to the simulator.
+        """
+        assert create_fastapi_app is not None
+        return create_fastapi_app(
+            env=ChaosOpsEnvironment,
+            action_cls=ChaosOpsAction,
+            observation_cls=ChaosOpsObservation,
+        )
+
+    # Build the app at import time so ``uvicorn chaosops.env.openenv_wrapper:app``
+    # works. Any error here is a config/install problem — fail loudly rather
+    # than serve a half-broken app.
+    try:
+        app = build_fastapi_app()
+    except Exception:  # pragma: no cover — surfaced via chaosops-serve
+        app = None
 else:
 
     class ChaosOpsClient:  # type: ignore[no-redef]
@@ -95,4 +110,40 @@ else:
     app = None
 
 
-__all__ = ["ChaosOpsClient", "build_fastapi_app", "app"]
+def serve_cli() -> None:
+    """``chaosops-serve`` console entry point.
+
+    Boots the FastAPI app with uvicorn. Raises a clear error if the
+    optional ``openenv`` extras are not installed.
+    """
+    try:
+        import uvicorn  # type: ignore[import-not-found]
+    except ImportError as exc:
+        raise SystemExit(
+            "uvicorn is required for chaosops-serve. "
+            "Install with:  pip install 'chaosops[openenv]'"
+        ) from exc
+
+    if not _HAS_OPENENV:
+        raise SystemExit(
+            "openenv-core is required for chaosops-serve. "
+            "Install with:  pip install 'chaosops[openenv]'"
+        )
+
+    import argparse
+
+    parser = argparse.ArgumentParser(description="ChaosOps AI HTTP server")
+    parser.add_argument("--host", default="0.0.0.0")
+    parser.add_argument("--port", type=int, default=8000)
+    parser.add_argument("--reload", action="store_true")
+    args = parser.parse_args()
+
+    uvicorn.run(
+        "chaosops.env.openenv_wrapper:app",
+        host=args.host,
+        port=args.port,
+        reload=args.reload,
+    )
+
+
+__all__ = ["ChaosOpsClient", "build_fastapi_app", "app", "serve_cli"]

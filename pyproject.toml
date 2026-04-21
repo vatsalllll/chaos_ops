@@ -1,0 +1,96 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "chaosops"
+version = "0.2.0"
+description = "Multi-agent incident-response simulator with rogue-agent detection."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "ChaosOps AI" }]
+keywords = ["rl", "multi-agent", "llm", "openenv", "incident-response", "oversight"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "pydantic>=2.0.0",
+]
+
+[project.optional-dependencies]
+# HTTP server + OpenEnv client (optional; simulator runs fine without it)
+openenv = [
+    "openenv-core>=0.2.2",
+    "fastapi>=0.104.0",
+    "uvicorn>=0.24.0",
+]
+# Rich terminal dashboard + matplotlib reward-curve plot
+dashboard = [
+    "rich>=13.7.0",
+    "matplotlib>=3.7.0",
+]
+# Unit + integration test suite
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "httpx>=0.27.0",
+]
+# Real LLM inference (kept optional so CPU-only installs stay tiny)
+llm = [
+    "openai>=1.40.0",
+    "anthropic>=0.34.0",
+]
+# Full GRPO training stack — GPU-only
+training = [
+    "torch>=2.2.0",
+    "transformers>=4.45.0",
+    "trl>=0.11.0",
+    "unsloth>=2024.10.1",
+    "accelerate>=0.33.0",
+    "datasets>=2.20.0",
+]
+# Meta-group: everything except the GPU training stack
+all = [
+    "openenv-core>=0.2.2",
+    "fastapi>=0.104.0",
+    "uvicorn>=0.24.0",
+    "rich>=13.7.0",
+    "matplotlib>=3.7.0",
+    "openai>=1.40.0",
+    "anthropic>=0.34.0",
+]
+
+[project.scripts]
+chaosops-baseline = "chaosops.train.baseline:main"
+chaosops-eval = "chaosops.train.evaluate:main"
+chaosops-dashboard = "chaosops.dashboard.terminal:main"
+chaosops-transcript = "chaosops.dashboard.transcript:main"
+chaosops-serve = "chaosops.env.openenv_wrapper:serve_cli"
+
+[project.urls]
+Documentation = "https://github.com/chaosops-ai/chaosops#readme"
+Source = "https://github.com/chaosops-ai/chaosops"
+Issues = "https://github.com/chaosops-ai/chaosops/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["chaosops*"]
+exclude = ["tests*", "artifacts*", "docs*", "notebooks*", "sql_debugger*", "openenv-course*"]
+
+[tool.setuptools.package-data]
+chaosops = ["py.typed", "agents/prompts/*.md"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+markers = [
+    "integration: integration test (may require optional deps like fastapi)",
+    "slow: long-running test (skipped by default on CI quick runs)",
+]
