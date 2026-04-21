@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Env
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+.DS_Store
+
+# Training / big artifacts
+*.ckpt
+*.safetensors
+*.bin
+wandb/
+runs/
+outputs/
+lora_out/
+
+# Keep baseline artifacts (needed for pitch) but exclude ad-hoc runs
+artifacts/*
+!artifacts/baseline/
+artifacts/baseline/*.tmp

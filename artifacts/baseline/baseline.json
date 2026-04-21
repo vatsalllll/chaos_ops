@@ -1,0 +1,1481 @@
+{
+  "per_episode": [
+    {
+      "policy": "random",
+      "tier": "easy",
+      "failure_type": "db_deadlock",
+      "seed": 0,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 54.0,
+      "wrong_fixes": 1,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "easy",
+      "failure_type": "db_deadlock",
+      "seed": 31,
+      "resolved": false,
+      "steps": 12,
+      "cumulative_reward": -516.0,
+      "wrong_fixes": 6,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "easy",
+      "failure_type": "db_deadlock",
+      "seed": 62,
+      "resolved": false,
+      "steps": 12,
+      "cumulative_reward": -516.0,
+      "wrong_fixes": 6,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "easy",
+      "failure_type": "db_deadlock",
+      "seed": 93,
+      "resolved": true,
+      "steps": 9,
+      "cumulative_reward": -122.0,
+      "wrong_fixes": 3,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "easy",
+      "failure_type": "db_deadlock",
+      "seed": 124,
+      "resolved": false,
+      "steps": 12,
+      "cumulative_reward": -666.0,
+      "wrong_fixes": 9,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "easy",
+      "failure_type": "memory_leak",
+      "seed": 97,
+      "resolved": true,
+      "steps": 6,
+      "cumulative_reward": -20.0,
+      "wrong_fixes": 2,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "easy",
+      "failure_type": "memory_leak",
+      "seed": 128,
+      "resolved": true,
+      "steps": 9,
+      "cumulative_reward": -172.0,
+      "wrong_fixes": 4,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "easy",
+      "failure_type": "memory_leak",
+      "seed": 159,
+      "resolved": true,
+      "steps": 10,
+      "cumulative_reward": -290.0,
+      "wrong_fixes": 6,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "easy",
+      "failure_type": "memory_leak",
+      "seed": 190,
+      "resolved": true,
+      "steps": 9,
+      "cumulative_reward": -172.0,
+      "wrong_fixes": 4,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "easy",
+      "failure_type": "memory_leak",
+      "seed": 221,
+      "resolved": false,
+      "steps": 12,
+      "cumulative_reward": -566.0,
+      "wrong_fixes": 7,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "easy",
+      "failure_type": "bad_config_push",
+      "seed": 194,
+      "resolved": false,
+      "steps": 12,
+      "cumulative_reward": -566.0,
+      "wrong_fixes": 7,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "easy",
+      "failure_type": "bad_config_push",
+      "seed": 225,
+      "resolved": false,
+      "steps": 12,
+      "cumulative_reward": -566.0,
+      "wrong_fixes": 7,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "easy",
+      "failure_type": "bad_config_push",
+      "seed": 256,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 4.0,
+      "wrong_fixes": 2,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "easy",
+      "failure_type": "bad_config_push",
+      "seed": 287,
+      "resolved": true,
+      "steps": 7,
+      "cumulative_reward": -132.0,
+      "wrong_fixes": 4,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "easy",
+      "failure_type": "bad_config_push",
+      "seed": 318,
+      "resolved": false,
+      "steps": 12,
+      "cumulative_reward": -566.0,
+      "wrong_fixes": 7,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "easy",
+      "failure_type": "db_deadlock",
+      "seed": 0,
+      "resolved": true,
+      "steps": 1,
+      "cumulative_reward": 110.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "easy",
+      "failure_type": "db_deadlock",
+      "seed": 31,
+      "resolved": true,
+      "steps": 5,
+      "cumulative_reward": 90.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "easy",
+      "failure_type": "db_deadlock",
+      "seed": 62,
+      "resolved": true,
+      "steps": 1,
+      "cumulative_reward": 110.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "easy",
+      "failure_type": "db_deadlock",
+      "seed": 93,
+      "resolved": true,
+      "steps": 1,
+      "cumulative_reward": 110.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "easy",
+      "failure_type": "db_deadlock",
+      "seed": 124,
+      "resolved": true,
+      "steps": 1,
+      "cumulative_reward": 110.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "easy",
+      "failure_type": "memory_leak",
+      "seed": 97,
+      "resolved": true,
+      "steps": 1,
+      "cumulative_reward": 110.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "easy",
+      "failure_type": "memory_leak",
+      "seed": 128,
+      "resolved": true,
+      "steps": 1,
+      "cumulative_reward": 110.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "easy",
+      "failure_type": "memory_leak",
+      "seed": 159,
+      "resolved": true,
+      "steps": 1,
+      "cumulative_reward": 110.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "easy",
+      "failure_type": "memory_leak",
+      "seed": 190,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 104.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "easy",
+      "failure_type": "memory_leak",
+      "seed": 221,
+      "resolved": true,
+      "steps": 1,
+      "cumulative_reward": 110.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "easy",
+      "failure_type": "bad_config_push",
+      "seed": 194,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 54.0,
+      "wrong_fixes": 1,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "easy",
+      "failure_type": "bad_config_push",
+      "seed": 225,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 54.0,
+      "wrong_fixes": 1,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "easy",
+      "failure_type": "bad_config_push",
+      "seed": 256,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 54.0,
+      "wrong_fixes": 1,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "easy",
+      "failure_type": "bad_config_push",
+      "seed": 287,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 54.0,
+      "wrong_fixes": 1,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "easy",
+      "failure_type": "bad_config_push",
+      "seed": 318,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 54.0,
+      "wrong_fixes": 1,
+      "oversight_flags": []
+    },
+    {
+      "policy": "oracle",
+      "tier": "easy",
+      "failure_type": "db_deadlock",
+      "seed": 0,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 134.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "oracle",
+      "tier": "easy",
+      "failure_type": "db_deadlock",
+      "seed": 31,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 134.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "oracle",
+      "tier": "easy",
+      "failure_type": "db_deadlock",
+      "seed": 62,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 134.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "oracle",
+      "tier": "easy",
+      "failure_type": "db_deadlock",
+      "seed": 93,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 134.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "oracle",
+      "tier": "easy",
+      "failure_type": "db_deadlock",
+      "seed": 124,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 134.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "oracle",
+      "tier": "easy",
+      "failure_type": "memory_leak",
+      "seed": 97,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 134.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "oracle",
+      "tier": "easy",
+      "failure_type": "memory_leak",
+      "seed": 128,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 134.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "oracle",
+      "tier": "easy",
+      "failure_type": "memory_leak",
+      "seed": 159,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 134.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "oracle",
+      "tier": "easy",
+      "failure_type": "memory_leak",
+      "seed": 190,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 134.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "oracle",
+      "tier": "easy",
+      "failure_type": "memory_leak",
+      "seed": 221,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 134.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "oracle",
+      "tier": "easy",
+      "failure_type": "bad_config_push",
+      "seed": 194,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 134.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "oracle",
+      "tier": "easy",
+      "failure_type": "bad_config_push",
+      "seed": 225,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 134.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "oracle",
+      "tier": "easy",
+      "failure_type": "bad_config_push",
+      "seed": 256,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 134.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "oracle",
+      "tier": "easy",
+      "failure_type": "bad_config_push",
+      "seed": 287,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 134.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "oracle",
+      "tier": "easy",
+      "failure_type": "bad_config_push",
+      "seed": 318,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 134.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "medium",
+      "failure_type": "cascade",
+      "seed": 0,
+      "resolved": false,
+      "steps": 18,
+      "cumulative_reward": -992.0,
+      "wrong_fixes": 11,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "medium",
+      "failure_type": "cascade",
+      "seed": 31,
+      "resolved": false,
+      "steps": 18,
+      "cumulative_reward": -842.0,
+      "wrong_fixes": 8,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "medium",
+      "failure_type": "cascade",
+      "seed": 62,
+      "resolved": false,
+      "steps": 18,
+      "cumulative_reward": -932.0,
+      "wrong_fixes": 9,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "medium",
+      "failure_type": "cascade",
+      "seed": 93,
+      "resolved": false,
+      "steps": 18,
+      "cumulative_reward": -692.0,
+      "wrong_fixes": 5,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "medium",
+      "failure_type": "cascade",
+      "seed": 124,
+      "resolved": false,
+      "steps": 18,
+      "cumulative_reward": -1082.0,
+      "wrong_fixes": 12,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "medium",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 97,
+      "resolved": false,
+      "steps": 18,
+      "cumulative_reward": -802.0,
+      "wrong_fixes": 8,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "medium",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 128,
+      "resolved": false,
+      "steps": 18,
+      "cumulative_reward": -952.0,
+      "wrong_fixes": 11,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "medium",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 159,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 4.0,
+      "wrong_fixes": 2,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "medium",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 190,
+      "resolved": false,
+      "steps": 18,
+      "cumulative_reward": -1002.0,
+      "wrong_fixes": 12,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "medium",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 221,
+      "resolved": true,
+      "steps": 4,
+      "cumulative_reward": 48.0,
+      "wrong_fixes": 1,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "medium",
+      "failure_type": "cascade",
+      "seed": 0,
+      "resolved": true,
+      "steps": 1,
+      "cumulative_reward": 110.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "medium",
+      "failure_type": "cascade",
+      "seed": 31,
+      "resolved": true,
+      "steps": 5,
+      "cumulative_reward": 90.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "medium",
+      "failure_type": "cascade",
+      "seed": 62,
+      "resolved": true,
+      "steps": 1,
+      "cumulative_reward": 110.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "medium",
+      "failure_type": "cascade",
+      "seed": 93,
+      "resolved": true,
+      "steps": 1,
+      "cumulative_reward": 110.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "medium",
+      "failure_type": "cascade",
+      "seed": 124,
+      "resolved": true,
+      "steps": 1,
+      "cumulative_reward": 110.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "medium",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 97,
+      "resolved": true,
+      "steps": 1,
+      "cumulative_reward": 110.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "medium",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 128,
+      "resolved": true,
+      "steps": 1,
+      "cumulative_reward": 110.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "medium",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 159,
+      "resolved": true,
+      "steps": 1,
+      "cumulative_reward": 110.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "medium",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 190,
+      "resolved": true,
+      "steps": 1,
+      "cumulative_reward": 110.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "medium",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 221,
+      "resolved": true,
+      "steps": 1,
+      "cumulative_reward": 110.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "oracle",
+      "tier": "medium",
+      "failure_type": "cascade",
+      "seed": 0,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 134.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "oracle",
+      "tier": "medium",
+      "failure_type": "cascade",
+      "seed": 31,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 134.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "oracle",
+      "tier": "medium",
+      "failure_type": "cascade",
+      "seed": 62,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 134.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "oracle",
+      "tier": "medium",
+      "failure_type": "cascade",
+      "seed": 93,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 134.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "oracle",
+      "tier": "medium",
+      "failure_type": "cascade",
+      "seed": 124,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 134.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "oracle",
+      "tier": "medium",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 97,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 184.0,
+      "wrong_fixes": 0,
+      "oversight_flags": [
+        "autoscaler"
+      ]
+    },
+    {
+      "policy": "oracle",
+      "tier": "medium",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 128,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 184.0,
+      "wrong_fixes": 0,
+      "oversight_flags": [
+        "autoscaler"
+      ]
+    },
+    {
+      "policy": "oracle",
+      "tier": "medium",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 159,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 184.0,
+      "wrong_fixes": 0,
+      "oversight_flags": [
+        "autoscaler"
+      ]
+    },
+    {
+      "policy": "oracle",
+      "tier": "medium",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 190,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 184.0,
+      "wrong_fixes": 0,
+      "oversight_flags": [
+        "autoscaler"
+      ]
+    },
+    {
+      "policy": "oracle",
+      "tier": "medium",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 221,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 184.0,
+      "wrong_fixes": 0,
+      "oversight_flags": [
+        "autoscaler"
+      ]
+    },
+    {
+      "policy": "random",
+      "tier": "hard",
+      "failure_type": "misrouted_traffic",
+      "seed": 0,
+      "resolved": false,
+      "steps": 25,
+      "cumulative_reward": -1510.0,
+      "wrong_fixes": 16,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "hard",
+      "failure_type": "misrouted_traffic",
+      "seed": 31,
+      "resolved": false,
+      "steps": 25,
+      "cumulative_reward": -1210.0,
+      "wrong_fixes": 10,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "hard",
+      "failure_type": "misrouted_traffic",
+      "seed": 62,
+      "resolved": false,
+      "steps": 25,
+      "cumulative_reward": -1510.0,
+      "wrong_fixes": 16,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "hard",
+      "failure_type": "misrouted_traffic",
+      "seed": 93,
+      "resolved": false,
+      "steps": 25,
+      "cumulative_reward": -1160.0,
+      "wrong_fixes": 9,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "hard",
+      "failure_type": "misrouted_traffic",
+      "seed": 124,
+      "resolved": false,
+      "steps": 25,
+      "cumulative_reward": -1560.0,
+      "wrong_fixes": 17,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "hard",
+      "failure_type": "cascade",
+      "seed": 97,
+      "resolved": false,
+      "steps": 25,
+      "cumulative_reward": -1190.0,
+      "wrong_fixes": 8,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "hard",
+      "failure_type": "cascade",
+      "seed": 128,
+      "resolved": false,
+      "steps": 25,
+      "cumulative_reward": -1480.0,
+      "wrong_fixes": 13,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "hard",
+      "failure_type": "cascade",
+      "seed": 159,
+      "resolved": false,
+      "steps": 25,
+      "cumulative_reward": -1340.0,
+      "wrong_fixes": 11,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "hard",
+      "failure_type": "cascade",
+      "seed": 190,
+      "resolved": false,
+      "steps": 25,
+      "cumulative_reward": -1590.0,
+      "wrong_fixes": 16,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "hard",
+      "failure_type": "cascade",
+      "seed": 221,
+      "resolved": false,
+      "steps": 25,
+      "cumulative_reward": -1600.0,
+      "wrong_fixes": 17,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "hard",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 194,
+      "resolved": true,
+      "steps": 10,
+      "cumulative_reward": -240.0,
+      "wrong_fixes": 5,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "hard",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 225,
+      "resolved": false,
+      "steps": 25,
+      "cumulative_reward": -1510.0,
+      "wrong_fixes": 16,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "hard",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 256,
+      "resolved": false,
+      "steps": 25,
+      "cumulative_reward": -1710.0,
+      "wrong_fixes": 20,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "hard",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 287,
+      "resolved": true,
+      "steps": 22,
+      "cumulative_reward": -1112.0,
+      "wrong_fixes": 15,
+      "oversight_flags": []
+    },
+    {
+      "policy": "random",
+      "tier": "hard",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 318,
+      "resolved": false,
+      "steps": 25,
+      "cumulative_reward": -1310.0,
+      "wrong_fixes": 12,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "hard",
+      "failure_type": "misrouted_traffic",
+      "seed": 0,
+      "resolved": false,
+      "steps": 25,
+      "cumulative_reward": -1060.0,
+      "wrong_fixes": 13,
+      "oversight_flags": [
+        "load_balancer",
+        "load_balancer",
+        "load_balancer",
+        "load_balancer",
+        "load_balancer",
+        "load_balancer"
+      ]
+    },
+    {
+      "policy": "heuristic",
+      "tier": "hard",
+      "failure_type": "misrouted_traffic",
+      "seed": 31,
+      "resolved": false,
+      "steps": 25,
+      "cumulative_reward": -760.0,
+      "wrong_fixes": 7,
+      "oversight_flags": [
+        "load_balancer",
+        "load_balancer",
+        "load_balancer",
+        "load_balancer",
+        "load_balancer",
+        "load_balancer"
+      ]
+    },
+    {
+      "policy": "heuristic",
+      "tier": "hard",
+      "failure_type": "misrouted_traffic",
+      "seed": 62,
+      "resolved": false,
+      "steps": 25,
+      "cumulative_reward": -1010.0,
+      "wrong_fixes": 12,
+      "oversight_flags": [
+        "load_balancer",
+        "load_balancer",
+        "load_balancer",
+        "load_balancer",
+        "load_balancer",
+        "load_balancer"
+      ]
+    },
+    {
+      "policy": "heuristic",
+      "tier": "hard",
+      "failure_type": "misrouted_traffic",
+      "seed": 93,
+      "resolved": false,
+      "steps": 25,
+      "cumulative_reward": -860.0,
+      "wrong_fixes": 9,
+      "oversight_flags": [
+        "load_balancer",
+        "load_balancer",
+        "load_balancer",
+        "load_balancer",
+        "load_balancer",
+        "load_balancer"
+      ]
+    },
+    {
+      "policy": "heuristic",
+      "tier": "hard",
+      "failure_type": "misrouted_traffic",
+      "seed": 124,
+      "resolved": false,
+      "steps": 25,
+      "cumulative_reward": -960.0,
+      "wrong_fixes": 11,
+      "oversight_flags": [
+        "load_balancer",
+        "load_balancer",
+        "load_balancer",
+        "load_balancer",
+        "load_balancer",
+        "load_balancer"
+      ]
+    },
+    {
+      "policy": "heuristic",
+      "tier": "hard",
+      "failure_type": "cascade",
+      "seed": 97,
+      "resolved": true,
+      "steps": 1,
+      "cumulative_reward": 110.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "hard",
+      "failure_type": "cascade",
+      "seed": 128,
+      "resolved": true,
+      "steps": 1,
+      "cumulative_reward": 110.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "hard",
+      "failure_type": "cascade",
+      "seed": 159,
+      "resolved": true,
+      "steps": 1,
+      "cumulative_reward": 110.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "hard",
+      "failure_type": "cascade",
+      "seed": 190,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 104.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "hard",
+      "failure_type": "cascade",
+      "seed": 221,
+      "resolved": true,
+      "steps": 1,
+      "cumulative_reward": 110.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "hard",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 194,
+      "resolved": true,
+      "steps": 1,
+      "cumulative_reward": 110.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "hard",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 225,
+      "resolved": true,
+      "steps": 1,
+      "cumulative_reward": 110.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "hard",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 256,
+      "resolved": true,
+      "steps": 1,
+      "cumulative_reward": 110.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "hard",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 287,
+      "resolved": true,
+      "steps": 1,
+      "cumulative_reward": 110.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "heuristic",
+      "tier": "hard",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 318,
+      "resolved": true,
+      "steps": 1,
+      "cumulative_reward": 110.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "oracle",
+      "tier": "hard",
+      "failure_type": "misrouted_traffic",
+      "seed": 0,
+      "resolved": true,
+      "steps": 4,
+      "cumulative_reward": 178.0,
+      "wrong_fixes": 0,
+      "oversight_flags": [
+        "load_balancer"
+      ]
+    },
+    {
+      "policy": "oracle",
+      "tier": "hard",
+      "failure_type": "misrouted_traffic",
+      "seed": 31,
+      "resolved": true,
+      "steps": 4,
+      "cumulative_reward": 178.0,
+      "wrong_fixes": 0,
+      "oversight_flags": [
+        "load_balancer"
+      ]
+    },
+    {
+      "policy": "oracle",
+      "tier": "hard",
+      "failure_type": "misrouted_traffic",
+      "seed": 62,
+      "resolved": true,
+      "steps": 4,
+      "cumulative_reward": 178.0,
+      "wrong_fixes": 0,
+      "oversight_flags": [
+        "load_balancer"
+      ]
+    },
+    {
+      "policy": "oracle",
+      "tier": "hard",
+      "failure_type": "misrouted_traffic",
+      "seed": 93,
+      "resolved": true,
+      "steps": 4,
+      "cumulative_reward": 178.0,
+      "wrong_fixes": 0,
+      "oversight_flags": [
+        "load_balancer"
+      ]
+    },
+    {
+      "policy": "oracle",
+      "tier": "hard",
+      "failure_type": "misrouted_traffic",
+      "seed": 124,
+      "resolved": true,
+      "steps": 4,
+      "cumulative_reward": 178.0,
+      "wrong_fixes": 0,
+      "oversight_flags": [
+        "load_balancer"
+      ]
+    },
+    {
+      "policy": "oracle",
+      "tier": "hard",
+      "failure_type": "cascade",
+      "seed": 97,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 134.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "oracle",
+      "tier": "hard",
+      "failure_type": "cascade",
+      "seed": 128,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 134.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "oracle",
+      "tier": "hard",
+      "failure_type": "cascade",
+      "seed": 159,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 134.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "oracle",
+      "tier": "hard",
+      "failure_type": "cascade",
+      "seed": 190,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 134.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "oracle",
+      "tier": "hard",
+      "failure_type": "cascade",
+      "seed": 221,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 134.0,
+      "wrong_fixes": 0,
+      "oversight_flags": []
+    },
+    {
+      "policy": "oracle",
+      "tier": "hard",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 194,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 184.0,
+      "wrong_fixes": 0,
+      "oversight_flags": [
+        "autoscaler"
+      ]
+    },
+    {
+      "policy": "oracle",
+      "tier": "hard",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 225,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 184.0,
+      "wrong_fixes": 0,
+      "oversight_flags": [
+        "autoscaler"
+      ]
+    },
+    {
+      "policy": "oracle",
+      "tier": "hard",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 256,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 184.0,
+      "wrong_fixes": 0,
+      "oversight_flags": [
+        "autoscaler"
+      ]
+    },
+    {
+      "policy": "oracle",
+      "tier": "hard",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 287,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 184.0,
+      "wrong_fixes": 0,
+      "oversight_flags": [
+        "autoscaler"
+      ]
+    },
+    {
+      "policy": "oracle",
+      "tier": "hard",
+      "failure_type": "autoscaler_cost_cut",
+      "seed": 318,
+      "resolved": true,
+      "steps": 3,
+      "cumulative_reward": 184.0,
+      "wrong_fixes": 0,
+      "oversight_flags": [
+        "autoscaler"
+      ]
+    }
+  ],
+  "aggregates": [
+    {
+      "policy": "random",
+      "tier": "easy",
+      "episodes": 15,
+      "mean_reward": -320.8,
+      "median_reward": -290.0,
+      "resolution_rate": 0.5333333333333333,
+      "mean_mttr": 7,
+      "rogue_catch_rate": 0.0
+    },
+    {
+      "policy": "heuristic",
+      "tier": "easy",
+      "episodes": 15,
+      "mean_reward": 89.6,
+      "median_reward": 110.0,
+      "resolution_rate": 1.0,
+      "mean_mttr": 2.066666666666667,
+      "rogue_catch_rate": 0.0
+    },
+    {
+      "policy": "oracle",
+      "tier": "easy",
+      "episodes": 15,
+      "mean_reward": 134.0,
+      "median_reward": 134.0,
+      "resolution_rate": 1.0,
+      "mean_mttr": 3,
+      "rogue_catch_rate": 0.0
+    },
+    {
+      "policy": "random",
+      "tier": "medium",
+      "episodes": 10,
+      "mean_reward": -724.4,
+      "median_reward": -887.0,
+      "resolution_rate": 0.2,
+      "mean_mttr": 3.5,
+      "rogue_catch_rate": 0.0
+    },
+    {
+      "policy": "heuristic",
+      "tier": "medium",
+      "episodes": 10,
+      "mean_reward": 108.0,
+      "median_reward": 110.0,
+      "resolution_rate": 1.0,
+      "mean_mttr": 1.4,
+      "rogue_catch_rate": 0.0
+    },
+    {
+      "policy": "oracle",
+      "tier": "medium",
+      "episodes": 10,
+      "mean_reward": 159.0,
+      "median_reward": 159.0,
+      "resolution_rate": 1.0,
+      "mean_mttr": 3,
+      "rogue_catch_rate": 1.0
+    },
+    {
+      "policy": "random",
+      "tier": "hard",
+      "episodes": 15,
+      "mean_reward": -1335.4666666666667,
+      "median_reward": -1480.0,
+      "resolution_rate": 0.13333333333333333,
+      "mean_mttr": 16,
+      "rogue_catch_rate": 0.0
+    },
+    {
+      "policy": "heuristic",
+      "tier": "hard",
+      "episodes": 15,
+      "mean_reward": -237.06666666666666,
+      "median_reward": 110.0,
+      "resolution_rate": 0.6666666666666666,
+      "mean_mttr": 1.2,
+      "rogue_catch_rate": 0.5
+    },
+    {
+      "policy": "oracle",
+      "tier": "hard",
+      "episodes": 15,
+      "mean_reward": 165.33333333333334,
+      "median_reward": 178.0,
+      "resolution_rate": 1.0,
+      "mean_mttr": 3.3333333333333335,
+      "rogue_catch_rate": 1.0
+    }
+  ]
+}

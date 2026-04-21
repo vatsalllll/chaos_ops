@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "chaosops"
+version = "0.1.0"
+description = "Multi-agent incident response simulator with rogue-agent detection"
+requires-python = ">=3.10"
+dependencies = [
+    "pydantic>=2.0.0",
+]
+
+[project.optional-dependencies]
+openenv = ["openenv-core>=0.2.2", "fastapi>=0.104.0", "uvicorn>=0.24.0"]
+dashboard = ["rich>=13.7.0"]
+dev = ["pytest>=8.0.0"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["chaosops*"]
