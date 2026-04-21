@@ -168,6 +168,10 @@ class RoleView(BaseModel):
     visible_fleet_actions: list[FleetAgentLog]
     shared_chat: list[str]
     private_note: str | None = None  # only Oversight receives suspicion hints
+    # Messages addressed privately to this role (e.g., SRE <-> DEV backchannel).
+    # Populated by :func:`chaosops.env.projections.project_view` and never
+    # leaks into ``shared_chat``.
+    private_inbox: list[str] = Field(default_factory=list)
 
 
 class ChaosOpsObservation(BaseModel):
@@ -204,6 +208,10 @@ class ChaosOpsState(BaseModel):
     all_alerts: list[Alert] = Field(default_factory=list)
     fleet_actions: list[FleetAgentLog] = Field(default_factory=list)
     chat_history: list[str] = Field(default_factory=list)
+    # Per-role private inboxes (keyed by AgentRole.value). Populated when a
+    # communicate action carries a ``to=<role>`` argument. Kept server-side
+    # so ``project_view`` can hand each role only its own slice.
+    private_chat: dict[str, list[str]] = Field(default_factory=dict)
 
     resolved: bool = False
     wrong_fixes: int = 0
