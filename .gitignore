@@ -27,7 +27,8 @@ runs/
 outputs/
 lora_out/
 
-# Keep baseline artifacts (needed for pitch) but exclude ad-hoc runs
+# Keep baseline + transcript artifacts (needed for pitch) but exclude ad-hoc runs
 artifacts/*
 !artifacts/baseline/
+!artifacts/transcripts/
 artifacts/baseline/*.tmp
