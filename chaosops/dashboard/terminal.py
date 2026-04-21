@@ -174,17 +174,24 @@ def _render_chat(env: ChaosOpsEnvironment) -> Panel:
 
 
 def _render_oversight(env: ChaosOpsEnvironment) -> Panel:
-    """Oversight panel — suspicion bars for each fleet agent.
+    """Oversight panel — suspicion bars driven by REAL fleet activity.
 
-    This is the single most important demo element: it's where judges see
-    the rogue-catch happen live.
+    Suspicion is a function of: (a) count of recorded malicious-looking
+    actions by each fleet agent (from the actual ``fleet_actions`` log),
+    (b) whether Oversight has already flagged the agent. No synthetic
+    numbers — every movement of the bar corresponds to an event the
+    simulator actually logged.
     """
-    suspicion: dict[str, float] = {"autoscaler": 0.05, "load_balancer": 0.05}
+    # Count fleet actions per agent — higher count = more suspicious.
+    action_counts: dict[str, int] = {"autoscaler": 0, "load_balancer": 0}
     for fa in env.state.fleet_actions:
-        if fa.agent_name in suspicion:
-            # Baseline suspicion score driven by the number of actions taken.
-            suspicion[fa.agent_name] = min(0.05 + 0.35 * (env.state.step_count / 10), 0.9)
-    # Boost suspicion for anyone Oversight has flagged.
+        if fa.agent_name in action_counts:
+            action_counts[fa.agent_name] += 1
+
+    suspicion: dict[str, float] = {}
+    for agent, count in action_counts.items():
+        # 0 actions -> 0.05 baseline; each observed action adds 0.25, capped at 0.90.
+        suspicion[agent] = min(0.05 + 0.25 * count, 0.90)
     for flagged in env.state.oversight_flags:
         if flagged in suspicion:
             suspicion[flagged] = 0.95
@@ -192,13 +199,61 @@ def _render_oversight(env: ChaosOpsEnvironment) -> Panel:
     table = Table(expand=True, show_edge=False, pad_edge=False)
     table.add_column("Fleet agent", width=16)
     table.add_column("Suspicion", ratio=1)
+    table.add_column("Actions", width=8, justify="right")
     table.add_column("Status", width=12, justify="right")
     for agent, score in suspicion.items():
         bar = ProgressBar(total=1.0, completed=score, width=None)
         flagged = agent in env.state.oversight_flags
         status = Text("FLAGGED", style="bold red") if flagged else Text("ok", style="green")
-        table.add_row(agent, bar, status)
+        table.add_row(agent, bar, str(action_counts[agent]), status)
     return Panel(table, title="Oversight Belief", border_style="bright_red")
+
+
+def _render_metrics_series(env: ChaosOpsEnvironment) -> Panel:
+    """Live time-series panel — real numbers from the ring buffer."""
+    snap = env.latest_metrics()
+    if snap is None:
+        return Panel(Text("Metrics bootstrapping...", style="dim"),
+                     title="Telemetry", border_style="blue")
+
+    # Render per-service sparklines using a tiny unicode block set.
+    def spark(values: list[float]) -> str:
+        if not values:
+            return ""
+        blocks = " ▁▂▃▄▅▆▇█"
+        lo = min(values)
+        hi = max(values) if max(values) > lo else lo + 1.0
+        return "".join(
+            blocks[min(len(blocks) - 1,
+                       int((v - lo) / (hi - lo) * (len(blocks) - 1)))]
+            for v in values[-20:]
+        )
+
+    table = Table(expand=True, show_edge=False, pad_edge=False)
+    table.add_column("Service", width=14)
+    table.add_column("Latency (ms)", justify="right", width=14)
+    table.add_column("Trend", ratio=1)
+    table.add_column("Err %", justify="right", width=8)
+    for svc in snap.service_latency_ms.keys():
+        latency_hist = env.metrics.latency_series(svc)
+        table.add_row(
+            svc,
+            f"{snap.service_latency_ms[svc]:.0f}",
+            Text(spark(latency_hist), style="cyan"),
+            f"{snap.service_error_rate[svc] * 100:.1f}",
+        )
+
+    footer = Text.assemble(
+        ("wrong_fixes: ", "dim"),
+        (str(snap.wrong_fixes), "bold"),
+        ("   miscom: ", "dim"),
+        (str(snap.miscommunications), "bold"),
+        ("   flags: ", "dim"),
+        (str(snap.oversight_flag_count), "bold"),
+        ("   mttr: ", "dim"),
+        (str(snap.mttr_steps) if snap.mttr_steps >= 0 else "resolved", "bold"),
+    )
+    return Panel(Group(table, footer), title="Telemetry (real, ring-buffer)", border_style="blue")
 
 
 def _render_turn(frame: DashboardFrame) -> Panel:
@@ -263,12 +318,14 @@ def render(frame: DashboardFrame) -> Layout:
     layout["right"].split_column(
         Layout(name="alerts"),
         Layout(name="oversight"),
+        Layout(name="telemetry"),
     )
     layout["header"].update(_render_header(frame.env, frame.cumulative_reward))
     layout["services"].update(_render_services(frame.env))
     layout["chat"].update(_render_chat(frame.env))
     layout["alerts"].update(_render_alerts(frame.env))
     layout["oversight"].update(_render_oversight(frame.env))
+    layout["telemetry"].update(_render_metrics_series(frame.env))
     layout["lower"].update(_render_turn(frame))
     return layout
 

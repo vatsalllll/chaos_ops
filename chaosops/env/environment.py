@@ -19,6 +19,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from chaosops.env.metrics import MetricsRecorder, MetricsSnapshot
 from chaosops.env.models import (
     AgentRole,
     ChaosOpsAction,
@@ -63,13 +64,20 @@ class ChaosOpsEnvironment(_OpenEnvBase):
 
     SUPPORTS_CONCURRENT_SESSIONS: bool = True
 
-    def __init__(self, turn_order: tuple[AgentRole, ...] = DEFAULT_TURN_ORDER) -> None:
+    def __init__(
+        self,
+        turn_order: tuple[AgentRole, ...] = DEFAULT_TURN_ORDER,
+        *,
+        metrics_capacity: int = 512,
+    ) -> None:
         self._sim = WorldSim()
         self._turn_order = turn_order
         self._turn_index = 0
         self._last_breakdown: StepRewardBreakdown | None = None
         # Allow construction without a scenario for OpenEnv's reflection step.
         self._default_scenario: Scenario | None = None
+        # Persistent metrics recorder — replaces synthetic dashboard series.
+        self._metrics = MetricsRecorder(capacity=metrics_capacity)
 
     # ------------------------------------------------------------------
     # OpenEnv interface
@@ -104,6 +112,7 @@ class ChaosOpsEnvironment(_OpenEnvBase):
             self._sim.state.episode_id = episode_id
         self._turn_index = 0
         self._last_breakdown = None
+        self._metrics.reset()
 
         role = self._current_role()
         view = self._sim.project_view(role)
@@ -153,6 +162,10 @@ class ChaosOpsEnvironment(_OpenEnvBase):
             terminal_bonus = terminal_penalty_if_unresolved(self._sim.state)
             self._sim.state.cumulative_reward += terminal_bonus
 
+        # Record a real telemetry snapshot after every step — used by the
+        # dashboard sparkline panels and written to training logs.
+        self._metrics.on_step(self._sim.state, action)
+
         self._turn_index += 1
         next_role = self._current_role()
         view = self._sim.project_view(next_role)
@@ -190,6 +203,14 @@ class ChaosOpsEnvironment(_OpenEnvBase):
     def set_default_scenario(self, scenario: Scenario) -> None:
         """Allow the server to pre-configure the next ``reset`` call."""
         self._default_scenario = scenario
+
+    @property
+    def metrics(self) -> MetricsRecorder:
+        """Expose the ring-buffer recorder for dashboards and tests."""
+        return self._metrics
+
+    def latest_metrics(self) -> MetricsSnapshot | None:
+        return self._metrics.latest()
 
     # ------------------------------------------------------------------
     # Internals
