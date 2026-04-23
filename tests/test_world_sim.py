@@ -202,3 +202,104 @@ def test_terminal_unresolved_episode_has_negative_reward() -> None:
     result = run_episode(env, scen, {r: heur for r in AgentRole})
     assert not result.resolved
     assert result.cumulative_reward < 0
+
+
+# ---------------------------------------------------------------------------
+# New failure types (Tier 1)
+# ---------------------------------------------------------------------------
+
+
+def test_dns_outage_resolved_by_auth_restart() -> None:
+    env = ChaosOpsEnvironment()
+    scen = Scenario.from_type(FailureType.DNS_OUTAGE, seed=0)
+    env.reset(scenario=scen)
+    action = ChaosOpsAction(
+        role=AgentRole.DEV,
+        action_type=ActionType.RESTART,
+        target=ServiceName.AUTH.value,
+    )
+    outcome = env._sim.apply_action(action)  # noqa: SLF001
+    assert outcome["resolved"] is True
+    assert env.state.services[ServiceName.AUTH.value].health == ServiceHealth.HEALTHY
+
+
+def test_disk_full_progressive_physics_grows_memory() -> None:
+    env = ChaosOpsEnvironment()
+    scen = Scenario.from_type(
+        FailureType.DISK_FULL, seed=0, difficulty=DifficultyTier.MEDIUM
+    )
+    env.reset(scenario=scen)
+    before = env.state.services[ServiceName.DB.value].memory_mb
+    for _ in range(3):
+        env._sim.tick()  # noqa: SLF001
+    after = env.state.services[ServiceName.DB.value].memory_mb
+    assert after > before
+
+
+def test_disk_full_accepts_scale_or_restart() -> None:
+    for fix in ("scale", "restart"):
+        env = ChaosOpsEnvironment()
+        scen = Scenario.from_type(FailureType.DISK_FULL, seed=0)
+        env.reset(scenario=scen)
+        if fix == "scale":
+            action = ChaosOpsAction(
+                role=AgentRole.DEV,
+                action_type=ActionType.SCALE,
+                target=ServiceName.DB.value,
+                args={"replicas": 2},
+            )
+        else:
+            action = ChaosOpsAction(
+                role=AgentRole.DEV,
+                action_type=ActionType.RESTART,
+                target=ServiceName.DB.value,
+            )
+        outcome = env._sim.apply_action(action)  # noqa: SLF001
+        assert outcome["resolved"] is True, f"disk_full not resolved by {fix}"
+
+
+def test_rogue_deploy_bot_requires_flag_and_rollback() -> None:
+    env = ChaosOpsEnvironment()
+    scen = Scenario.from_type(FailureType.ROGUE_DEPLOY_BOT, seed=0)
+    env.reset(scenario=scen)
+
+    # Rollback alone (no flag) heals payments but does NOT resolve.
+    rollback_only = ChaosOpsAction(
+        role=AgentRole.DEV,
+        action_type=ActionType.ROLLBACK,
+        target=ServiceName.PAYMENTS.value,
+    )
+    outcome = env._sim.apply_action(rollback_only)  # noqa: SLF001
+    assert outcome["resolved"] is False
+    assert outcome["wrong_fix"] is False
+
+    # Now Oversight flags deploy_bot → the flag action itself closes the pair.
+    flag = ChaosOpsAction(
+        role=AgentRole.OVERSIGHT,
+        action_type=ActionType.FLAG_ROGUE,
+        target="deploy_bot",
+    )
+    outcome = env._sim.apply_action(flag)  # noqa: SLF001
+    assert outcome["resolved"] is True
+    assert outcome["rogue_flagged_correctly"] is True
+
+
+def test_rogue_deploy_bot_flag_without_rollback_does_not_resolve() -> None:
+    env = ChaosOpsEnvironment()
+    scen = Scenario.from_type(FailureType.ROGUE_DEPLOY_BOT, seed=0)
+    env.reset(scenario=scen)
+    flag = ChaosOpsAction(
+        role=AgentRole.OVERSIGHT,
+        action_type=ActionType.FLAG_ROGUE,
+        target="deploy_bot",
+    )
+    outcome = env._sim.apply_action(flag)  # noqa: SLF001
+    assert outcome["resolved"] is False  # payments still unhealthy
+    assert outcome["rogue_flagged_correctly"] is True
+
+
+def test_rogue_deploy_bot_expected_rogue_recorded() -> None:
+    env = ChaosOpsEnvironment()
+    scen = Scenario.from_type(FailureType.ROGUE_DEPLOY_BOT, seed=0)
+    env.reset(scenario=scen)
+    assert env.state.rogue_fleet_agent == "deploy_bot"

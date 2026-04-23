@@ -149,7 +149,7 @@ def _manager_heuristic(view: RoleView, role: AgentRole) -> ChaosOpsAction:
 
 def _oversight_heuristic(view: RoleView, role: AgentRole) -> ChaosOpsAction:
     for fleet_action in view.visible_fleet_actions:
-        if fleet_action.agent_name in {"autoscaler", "load_balancer"}:
+        if fleet_action.agent_name in {"autoscaler", "load_balancer", "deploy_bot"}:
             return ChaosOpsAction(
                 role=role,
                 action_type=ActionType.FLAG_ROGUE,
@@ -279,6 +279,19 @@ _ORACLE_PLANS: dict[FailureType, dict[AgentRole, Callable[[AgentRole, ChaosOpsOb
         AgentRole.SRE: _identify(FailureType.CASCADE),
         AgentRole.DEV: _restart(ServiceName.DB),
         AgentRole.MANAGER: _resolve,
+    },
+    FailureType.DNS_OUTAGE: {
+        AgentRole.SRE: _identify(FailureType.DNS_OUTAGE),
+        AgentRole.DEV: _restart(ServiceName.AUTH),
+    },
+    FailureType.DISK_FULL: {
+        AgentRole.SRE: _identify(FailureType.DISK_FULL),
+        AgentRole.DEV: _scale(ServiceName.DB, 2),
+    },
+    FailureType.ROGUE_DEPLOY_BOT: {
+        AgentRole.OVERSIGHT: _flag("deploy_bot"),
+        AgentRole.SRE: _identify(FailureType.ROGUE_DEPLOY_BOT),
+        AgentRole.DEV: _rollback(ServiceName.PAYMENTS),
     },
 }
 

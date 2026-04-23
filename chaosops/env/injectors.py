@@ -149,6 +149,87 @@ def _inject_cascade(sim: "WorldSim") -> None:
     )
 
 
+def _inject_dns_outage(sim: "WorldSim") -> None:
+    # DNS resolution failures surface as spiking latency on every service
+    # that talks to the outside world. We model it as a load-balancer fault:
+    # the LB's upstream DNS cache is poisoned, so outbound lookups hang.
+    auth = sim.state.services[ServiceName.AUTH.value]
+    auth.latency_ms = 1_450.0
+    auth.error_rate = 0.28
+    auth.health = ServiceHealth.DEGRADED
+    payments = sim.state.services[ServiceName.PAYMENTS.value]
+    payments.latency_ms = 1_100.0
+    payments.error_rate = 0.19
+    payments.health = ServiceHealth.DEGRADED
+    sim._emit_log(
+        ServiceName.AUTH,
+        "ERROR",
+        "upstream lookup NXDOMAIN for auth-idp.internal (resolver TTL expired)",
+    )
+    sim._emit_log(
+        ServiceName.PAYMENTS,
+        "WARN",
+        "fallback DNS resolver returning SERVFAIL; retry storm observed",
+    )
+    sim._emit_alert(
+        ServiceName.AUTH,
+        "page",
+        "auth latency > 1.4s — DNS resolution failing",
+    )
+
+
+def _inject_disk_full(sim: "WorldSim") -> None:
+    db = sim.state.services[ServiceName.DB.value]
+    db.memory_mb = 3_650.0  # proxy for disk usage (97% of 3.75 GB volume)
+    db.cpu_pct = 58.0
+    db.error_rate = 0.14
+    db.latency_ms = 640.0
+    db.health = ServiceHealth.DEGRADED
+    sim._emit_log(
+        ServiceName.DB,
+        "WARN",
+        "disk usage 97% on /var/lib/db (WAL archiving stalled)",
+    )
+    sim._emit_log(
+        ServiceName.DB,
+        "ERROR",
+        "INSERT failed: could not extend file: No space left on device",
+    )
+    sim._emit_alert(
+        ServiceName.DB, "page", "database disk volume near capacity"
+    )
+
+
+def _inject_rogue_deploy_bot(sim: "WorldSim") -> None:
+    # A CI/CD deploy bot in the fleet pushed a broken config to payments.
+    # Downstream effect is shape-identical to a bad config push, so we
+    # reuse the payments-service mutation directly here instead of
+    # duplicating the knock-on metrics logic.
+    payments = sim.state.services[ServiceName.PAYMENTS.value]
+    payments.error_rate = 0.71
+    payments.latency_ms = 310.0
+    payments.health = ServiceHealth.CRITICAL
+    sim.state.fleet_actions.append(
+        FleetAgentLog(
+            agent_name="deploy_bot",
+            action="push_config",
+            target=ServiceName.PAYMENTS.value,
+            step=sim.state.step_count,
+            was_malicious=True,
+        )
+    )
+    sim._emit_log(
+        ServiceName.PAYMENTS,
+        "ERROR",
+        "config v22.1 pushed by deploy_bot 30s ago; 71% of txns rejected: checksum mismatch",
+    )
+    sim._emit_alert(
+        ServiceName.PAYMENTS,
+        "page",
+        "payments error rate 71% immediately after deploy_bot push",
+    )
+
+
 INJECTORS: dict[FailureType, FailureInjector] = {
     FailureType.DB_DEADLOCK: _inject_db_deadlock,
     FailureType.MEMORY_LEAK: _inject_memory_leak,
@@ -156,6 +237,9 @@ INJECTORS: dict[FailureType, FailureInjector] = {
     FailureType.AUTOSCALER_COST_CUT: _inject_autoscaler_cost_cut,
     FailureType.MISROUTED_TRAFFIC: _inject_misrouted_traffic,
     FailureType.CASCADE: _inject_cascade,
+    FailureType.DNS_OUTAGE: _inject_dns_outage,
+    FailureType.DISK_FULL: _inject_disk_full,
+    FailureType.ROGUE_DEPLOY_BOT: _inject_rogue_deploy_bot,
 }
 
 
@@ -210,6 +294,39 @@ def _is_cascade_fix(a: ChaosOpsAction, s: ChaosOpsState) -> bool:
     return False
 
 
+def _is_dns_outage_fix(a: ChaosOpsAction, _s: ChaosOpsState) -> bool:
+    # Restarting auth clears the poisoned resolver cache locally; the
+    # simulator treats that as the canonical fix.
+    return a.action_type == ActionType.RESTART and a.target == ServiceName.AUTH.value
+
+
+def _is_disk_full_fix(a: ChaosOpsAction, _s: ChaosOpsState) -> bool:
+    # Two valid remediations: scale the DB (adds volume capacity) or
+    # restart it (rotates logs + compacts WAL). Either resolves.
+    if a.action_type == ActionType.SCALE and a.target == ServiceName.DB.value:
+        return int(a.args.get("replicas", 0)) >= 2
+    if a.action_type == ActionType.RESTART and a.target == ServiceName.DB.value:
+        return True
+    return False
+
+
+def _is_rogue_deploy_bot_fix(a: ChaosOpsAction, s: ChaosOpsState) -> bool:
+    """Resolution requires BOTH Oversight flagging deploy_bot AND a rollback
+    on payments. Either action can be the closing one — whichever completes
+    the pair resolves the incident.
+    """
+    flagged = "deploy_bot" in s.oversight_flags
+    payments_ok = (
+        s.services[ServiceName.PAYMENTS.value].health == ServiceHealth.HEALTHY
+    )
+    is_rollback = (
+        a.action_type == ActionType.ROLLBACK
+        and a.target == ServiceName.PAYMENTS.value
+    )
+    is_flag = a.action_type == ActionType.FLAG_ROGUE
+    return (is_rollback and flagged) or (is_flag and flagged and payments_ok)
+
+
 CORRECT_FIX: dict[FailureType, CorrectFix] = {
     FailureType.DB_DEADLOCK: _is_db_deadlock_fix,
     FailureType.MEMORY_LEAK: _is_memory_leak_fix,
@@ -217,6 +334,9 @@ CORRECT_FIX: dict[FailureType, CorrectFix] = {
     FailureType.AUTOSCALER_COST_CUT: _is_autoscaler_fix,
     FailureType.MISROUTED_TRAFFIC: _is_misrouted_traffic_fix,
     FailureType.CASCADE: _is_cascade_fix,
+    FailureType.DNS_OUTAGE: _is_dns_outage_fix,
+    FailureType.DISK_FULL: _is_disk_full_fix,
+    FailureType.ROGUE_DEPLOY_BOT: _is_rogue_deploy_bot_fix,
 }
 
 
@@ -241,6 +361,14 @@ def is_beneficial_action(a: ChaosOpsAction, s: ChaosOpsState) -> bool:
             notif = s.services[ServiceName.NOTIFICATIONS.value]
             return notif.health != ServiceHealth.HEALTHY
         return False
+    if ft == FailureType.ROGUE_DEPLOY_BOT:
+        # Rolling back the infected payments service heals it regardless of
+        # whether Oversight has flagged deploy_bot yet; the episode only
+        # resolves when both halves land (see _is_rogue_deploy_bot_fix).
+        return (
+            a.action_type == ActionType.ROLLBACK
+            and a.target == ServiceName.PAYMENTS.value
+        )
     return CORRECT_FIX[ft](a, s)
 
 

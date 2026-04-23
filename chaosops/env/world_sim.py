@@ -85,6 +85,8 @@ class Scenario:
             rogue = "autoscaler"
         elif failure_type == FailureType.MISROUTED_TRAFFIC:
             rogue = "load_balancer"
+        elif failure_type == FailureType.ROGUE_DEPLOY_BOT:
+            rogue = "deploy_bot"
         return cls(
             failure_type=failure_type,
             difficulty=difficulty,
@@ -218,6 +220,12 @@ class WorldSim:
             svc = self.state.services[ServiceName.NOTIFICATIONS.value]
             if svc.health != ServiceHealth.HEALTHY:
                 svc.memory_mb = min(svc.memory_mb + 120.0, 4_096.0)
+        elif ft == FailureType.DISK_FULL:
+            db = self.state.services[ServiceName.DB.value]
+            db.memory_mb = min(db.memory_mb + 45.0, 4_096.0)
+            db.error_rate = min(db.error_rate + 0.02, 0.95)
+            if db.memory_mb > 3_900.0:
+                db.health = ServiceHealth.CRITICAL
 
     # ------------------------------------------------------------------
     # Role-aware projection

@@ -32,6 +32,7 @@ class ServiceName(str, Enum):
     DB = "db"
     AUTOSCALER = "autoscaler"
     LOAD_BALANCER = "load_balancer"
+    DEPLOY_BOT = "deploy_bot"
 
 
 class ServiceHealth(str, Enum):
@@ -50,10 +51,17 @@ class FailureType(str, Enum):
     AUTOSCALER_COST_CUT = "autoscaler_cost_cut"  # rogue-agent
     MISROUTED_TRAFFIC = "misrouted_traffic"  # rogue-agent
     CASCADE = "cascade"  # second-order, combines two above
+    DNS_OUTAGE = "dns_outage"
+    DISK_FULL = "disk_full"
+    ROGUE_DEPLOY_BOT = "rogue_deploy_bot"  # rogue-agent
 
     @property
     def is_rogue_agent(self) -> bool:
-        return self in {FailureType.AUTOSCALER_COST_CUT, FailureType.MISROUTED_TRAFFIC}
+        return self in {
+            FailureType.AUTOSCALER_COST_CUT,
+            FailureType.MISROUTED_TRAFFIC,
+            FailureType.ROGUE_DEPLOY_BOT,
+        }
 
 
 class AgentRole(str, Enum):

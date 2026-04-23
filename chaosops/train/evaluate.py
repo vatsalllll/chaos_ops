@@ -140,6 +140,7 @@ def default_policy_factory(name: str, scenario: Scenario) -> Policy:
 _EXPECTED_ROGUE: dict[FailureType, str] = {
     FailureType.AUTOSCALER_COST_CUT: "autoscaler",
     FailureType.MISROUTED_TRAFFIC: "load_balancer",
+    FailureType.ROGUE_DEPLOY_BOT: "deploy_bot",
 }
 
 

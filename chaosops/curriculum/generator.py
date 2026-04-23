@@ -33,15 +33,18 @@ _EASY_TYPES: tuple[FailureType, ...] = (
     FailureType.DB_DEADLOCK,
     FailureType.MEMORY_LEAK,
     FailureType.BAD_CONFIG_PUSH,
+    FailureType.DNS_OUTAGE,
 )
 _MEDIUM_TYPES: tuple[FailureType, ...] = (
     FailureType.CASCADE,
     FailureType.AUTOSCALER_COST_CUT,
+    FailureType.DISK_FULL,
 )
 _HARD_TYPES: tuple[FailureType, ...] = (
     FailureType.MISROUTED_TRAFFIC,
     FailureType.CASCADE,
     FailureType.AUTOSCALER_COST_CUT,
+    FailureType.ROGUE_DEPLOY_BOT,
 )
 
 
