@@ -1,0 +1,13 @@
+gradio>=4.44.0
+pydantic>=2.0.0
+rich>=13.7.0
+matplotlib>=3.7.0
+# Pull the ChaosOps package straight from GitHub so the Space has the latest
+# env/agents/dashboard code.
+chaosops @ git+https://github.com/vatsalllll/chaos_ops.git@main
+# Trained-policy lane (optional at cold-start, required before CHAOSOPS_ADAPTER_PATH is set)
+torch>=2.3.0
+transformers>=4.44.0
+peft>=0.12.0
+accelerate>=0.33.0
+safetensors>=0.4.3

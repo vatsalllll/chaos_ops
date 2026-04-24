@@ -8,13 +8,18 @@ incident itself may have been caused by a **rogue AI agent inside the
 fleet**, and the Oversight agent's job is to catch it.
 
 [![CI](https://github.com/chaosops-ai/chaosops/actions/workflows/ci.yml/badge.svg)](./.github/workflows/ci.yml)
-![tests](https://img.shields.io/badge/tests-98%20passing-brightgreen)
+![failures](https://img.shields.io/badge/failure_types-9-blue)
 ![python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)
+![trained](https://img.shields.io/badge/GRPO-Qwen%202.5%200.5B%20LoRA-purple)
 
 > As companies deploy AI agents into production operations — autoscalers,
 > deployers, incident triagers — a new class of outage emerges: incidents
 > caused **BY** AI, not just resolved by AI. ChaosOps AI trains the
 > overseers that catch them.
+
+**→ Live Space:** `https://huggingface.co/spaces/<your-username>/chaosops-ai` *(replace once deployed)*
+**→ Training notebook:** [`notebooks/colab_train.ipynb`](notebooks/colab_train.ipynb)
+**→ Pitch deck assets:** [`artifacts/baseline/baseline_curve.png`](artifacts/baseline/baseline_curve.png) · [`artifacts/chaosops-grpo/learning_curve.png`](artifacts/chaosops-grpo/learning_curve.png) · [`artifacts/evaluation/comparison_curve.png`](artifacts/evaluation/comparison_curve.png)
 
 ---
 
@@ -68,37 +73,104 @@ Requires Python ≥ 3.10.
 ## Quickstart
 
 ```bash
-# 1. run the full test suite (98 tests, ~1.3s)
+# 1. run the full test suite
 pytest
 
-# 2. one-command benchmark across seeds + all failure types
-chaosops-eval --seeds 0-9 --failures all --output artifacts/eval
+# 2. scripted-policy baselines → artifacts/baseline/baseline_curve.png
+python -m chaosops.train.baseline --episodes-per-type 5
 
-# 3. scripted-policy baselines → artifacts/baseline/baseline_curve.png
-chaosops-baseline --episodes-per-type 5
+# 3. 4-way policy eval (trained vs random/heuristic/oracle)
+python -m chaosops.train.evaluate \
+    --policies random heuristic oracle trained \
+    --adapter-path artifacts/chaosops-grpo/lora_adapter \
+    --out-dir artifacts/evaluation
 
 # 4. live terminal dashboard (pitch-ready)
-chaosops-dashboard --scenario autoscaler_cost_cut --policy oracle --difficulty hard
+chaosops-dashboard --scenario rogue_deploy_bot --policy oracle --difficulty hard
 
 # 5. serve the OpenEnv HTTP API
 chaosops-serve --host 0.0.0.0 --port 8000
 
-# 6. GRPO training (GPU)
-python -m chaosops.train.grpo_train --model Qwen/Qwen2.5-3B-Instruct --num-episodes 300
+# 6. GRPO training (Colab T4 or onsite GPU)
+python -m chaosops.train.grpo_train \
+    --model-name Qwen/Qwen2.5-0.5B-Instruct \
+    --total-episodes 800 --group-size 4 --lora-rank 16
+
+# 7. launch the Gradio Space locally
+python hf_space/app.py
 ```
 
 ---
 
-## Baseline reward gradient (HARD tier, 15 episodes)
+## Baseline reward gradient (HARD tier)
 
 | Policy | mean reward | resolution rate | rogue-catch rate |
 |---|---:|---:|---:|
-| Random    | **−1335** |  13% |   0% |
-| Heuristic |   **−237** |  67% |  50% |
-| Oracle    |   **+165** | 100% | 100% |
+| Random    | **−1239** |  12% |   0% |
+| Heuristic |   **−431** |  50% |  67% |
+| Oracle    |   **+170** | 100% | 100% |
 
-Clear gradient leaves real room for a trained policy to climb — see
+Clear gradient leaves real room for the trained policy to climb — see
 `artifacts/baseline/baseline_curve.png`.
+
+![Baseline curve](artifacts/baseline/baseline_curve.png)
+
+---
+
+## GRPO training — Qwen 2.5 0.5B (Colab T4)
+
+Trained with **TRL GRPO** on Unsloth 4-bit, LoRA `r=16`, group size 4,
+800 gradient steps. Oracle rollouts seed the dataset; the reward function
+deterministically replays `(scenario, action_history)` and scores the
+model's completion against the combined team + oversight reward.
+
+**Learning curve (800 steps, first-vs-last reward):**
+
+- **Mean reward**: `−8.87 → +4.29` (**Δ +13.16**)
+- KL divergence grows monotonically — policy is genuinely moving off base
+- No reward hacking, no collapse, clean cross-zero around step 340
+
+![GRPO learning curve](artifacts/chaosops-grpo/learning_curve.png)
+
+Reproduce:
+
+```bash
+# From a Colab T4:
+python -m chaosops.train.grpo_train \
+    --model-name Qwen/Qwen2.5-0.5B-Instruct \
+    --total-episodes 800 \
+    --group-size 4 \
+    --team-weight 0.6 \
+    --lora-rank 16 \
+    --output-dir artifacts/chaosops-grpo
+```
+
+Artifacts produced:
+
+- `artifacts/chaosops-grpo/lora_adapter/` — saveable LoRA weights
+- `artifacts/chaosops-grpo/training_metrics.json` — per-log reward + KL + loss
+- `artifacts/chaosops-grpo/learning_curve.png` — above chart
+
+---
+
+## After-training evaluation (4-way head-to-head)
+
+```bash
+chaosops-eval \
+    --policies random heuristic oracle trained \
+    --adapter-path artifacts/chaosops-grpo/lora_adapter \
+    --episodes-per-type 5 \
+    --out-dir artifacts/evaluation
+```
+
+Produces:
+
+- `artifacts/evaluation/evaluation_summary.txt` — per-(policy, tier) table
+- `artifacts/evaluation/comparison_curve.png` — mean reward by tier, all 4 policies
+- `artifacts/evaluation/rogue_vs_mttr.png` — HARD-tier head-to-head (rogue-catch + MTTR)
+
+![Comparison curve](artifacts/evaluation/comparison_curve.png)
+![HARD head-to-head](artifacts/evaluation/rogue_vs_mttr.png)
 
 ---
 
@@ -108,16 +180,19 @@ Clear gradient leaves real room for a trained policy to climb — see
 (Oversight runs before Dev so it has a chance to flag rogue fleet activity
 *before* a fast fix ends the episode.)
 
-**Six failure types**, two of which are rogue-agent incidents:
+**Nine failure types**, three of which are rogue-agent incidents:
 
-| Failure | Rogue? | Correct fix |
-|---|:---:|---|
-| `db_deadlock` |  | restart db |
-| `memory_leak` |  | restart target service |
-| `bad_config_push` |  | rollback target service |
-| `autoscaler_cost_cut` | ✓ | flag `autoscaler`, then scale |
-| `misrouted_traffic` | ✓ | flag `load_balancer`, then restart |
-| `cascade` |  | combined fix |
+| Failure | Rogue? | Tier | Correct fix |
+|---|:---:|---|---|
+| `db_deadlock` |  | easy | restart `db` |
+| `memory_leak` |  | easy | restart `notifications` |
+| `bad_config_push` |  | easy | rollback `auth` |
+| `dns_outage` |  | easy | restart `auth` (clears resolver) |
+| `autoscaler_cost_cut` | ✓ | medium | flag `autoscaler`, then scale payments |
+| `disk_full` |  | medium | scale `db` or restart |
+| `cascade` |  | hard | restart `db`, then restart `notifications` |
+| `misrouted_traffic` | ✓ | hard | flag `load_balancer`, manager escalates |
+| `rogue_deploy_bot` | ✓ | hard | flag `deploy_bot`, then rollback payments |
 
 **Partial observability.** Each role sees a projected `RoleView`:
 metrics, logs, alerts, fleet-agent activity — but never the ground-truth
@@ -328,6 +403,38 @@ compact sandbox for:
 
 See [`chaosops/README.md`](chaosops/README.md) for the reward formula,
 per-role observation schema, and rubric alignment details.
+
+---
+
+## Deploy the Hugging Face Space
+
+Self-contained bundle at [`hf_space/`](hf_space/):
+
+```
+hf_space/
+├── app.py            # Gradio UI — failure × policy × seed → full episode replay
+├── requirements.txt  # gradio + torch + peft + chaosops from GitHub
+└── README.md         # Space card with YAML frontmatter
+```
+
+One-time setup:
+
+```bash
+huggingface-cli login
+huggingface-cli repo create chaosops-ai --type space --sdk gradio
+
+# Push the hf_space/ directory as the Space repo
+git -C hf_space init
+git -C hf_space remote add origin https://huggingface.co/spaces/<your-username>/chaosops-ai
+git -C hf_space add .
+git -C hf_space commit -m "initial ChaosOps AI Space"
+git -C hf_space push -u origin main
+```
+
+Activate the trained policy on the Space by setting a secret
+`CHAOSOPS_ADAPTER_PATH` pointing at the uploaded LoRA adapter directory.
+The UI falls back to the heuristic when the variable is unset so the Space
+is usable even during cold-start.
 
 ---
 
