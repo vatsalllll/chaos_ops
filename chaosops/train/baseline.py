@@ -168,6 +168,7 @@ def _expected_flag(failure_type: FailureType) -> str:
     return {
         FailureType.AUTOSCALER_COST_CUT: "autoscaler",
         FailureType.MISROUTED_TRAFFIC: "load_balancer",
+        FailureType.ROGUE_DEPLOY_BOT: "deploy_bot",
     }[failure_type]
 
 

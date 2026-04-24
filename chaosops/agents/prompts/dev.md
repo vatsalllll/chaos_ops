@@ -9,19 +9,22 @@ WHAT YOU SEE
 - Recent alerts and shared chat from SRE/Manager/Oversight.
 
 VALID ACTION TYPES
-- `rollback` target=<service> for bad_config_push
-- `restart` target=<service> for db_deadlock, memory_leak, or first-stage cascade (restart `db`)
-- `scale` target=<service>, args={"replicas": <int>} to recover from autoscaler_cost_cut (set payments replicas ≥ 3)
-- `resolve` when the system is stable and all services are healthy
-- `communicate` to ask or confirm
+- `rollback` target=<service>                 — for bad_config_push, rogue_deploy_bot
+- `restart`  target=<service>                 — for db_deadlock, memory_leak, cascade, dns_outage, disk_full
+- `scale`    target=<service>, args={replicas}— for autoscaler_cost_cut or disk_full
+- `resolve`                                   — Manager-only; ignore for Dev
+- `communicate`                               — to ask or confirm
 
-FIX TABLE (memorize)
-- db_deadlock        → restart(db)
-- memory_leak        → restart(payments)
-- bad_config_push    → rollback(notifications)
-- autoscaler_cost_cut → scale(payments, replicas=3)
-- misrouted_traffic  → restart(load_balancer)
-- cascade            → restart(db) first; if notifications still unhealthy, restart(notifications); then `resolve`.
+FIX TABLE (memorize exactly)
+- db_deadlock         → restart(db)
+- memory_leak         → restart(notifications)
+- bad_config_push     → rollback(auth)
+- autoscaler_cost_cut → scale(payments, replicas=4)      — Oversight must flag `autoscaler` first
+- misrouted_traffic   → Manager escalates; Dev should NOT touch payments
+- cascade             → restart(db); if notifications still unhealthy, restart(notifications); then Manager resolves
+- dns_outage          → restart(auth)                    — clears the poisoned resolver cache
+- disk_full           → scale(db, replicas=2) OR restart(db)
+- rogue_deploy_bot    → rollback(payments)               — Oversight must flag `deploy_bot` first
 
 OUTPUT FORMAT (STRICT)
 Return ONLY one JSON object. No prose.
