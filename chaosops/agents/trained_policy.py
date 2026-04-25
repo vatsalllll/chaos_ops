@@ -123,11 +123,21 @@ class TrainedPolicy:
         if tokenizer.pad_token_id is None:
             tokenizer.pad_token = tokenizer.eos_token
 
+        # The Unsloth 4-bit base ships bnb-quantized weights that can only be
+        # placed on a device AT LOAD TIME — calling `.to(device)` afterwards
+        # silently leaves them on the bnb CPU backend, making every generate
+        # run ~30s instead of ~3s. Force placement with `device_map` when we
+        # have CUDA; fall back to a plain float32 load on CPU.
+        load_kwargs: dict[str, Any] = {"torch_dtype": dtype}
+        if device == "cuda":
+            load_kwargs["device_map"] = {"": 0}
         base = AutoModelForCausalLM.from_pretrained(
-            self.config.base_model, torch_dtype=dtype
+            self.config.base_model, **load_kwargs
         )
         model = PeftModel.from_pretrained(base, str(self.config.adapter_path))
-        model.to(device)
+        if device == "cpu":
+            # Safe to move only when the base is not 4-bit quantized.
+            model.to(device)
         model.eval()
 
         self._model = model
